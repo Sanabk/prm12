@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet" href="/bundles/app/css/app.css"/>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+<ul class="menu">
+    <li><a href="#/view1">view1</a></li>
+    <li><a href="#/view2">view2</a></li>
+</ul>
+
+
+<div ng-view>----------</div>
+
+    {% block body %}{% endblock %}
+
+    <script src="/bundles/app/lib/angular/angular.min.js"></script>
+    <script src="/bundles/app/js/app.js"></script>
+
+    {% block javascripts %}{% endblock %}
+
+</body>
+</html>

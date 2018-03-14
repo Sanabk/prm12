@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Publications list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Categorie</th>
+                <th>Region</th>
+                <th>Numero</th>
+                <th>Mail</th>
+                <th>Photos</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for publication in publications %}
+            <tr>
+                <td><a href="{{ path('publication_show', { 'id': publication.id }) }}">{{ publication.id }}</a></td>
+                <td>{{ publication.titre }}</td>
+                <td>{{ publication.description }}</td>
+                <td>{{ publication.categorie }}</td>
+                <td>{{ publication.region }}</td>
+                <td>{{ publication.numero }}</td>
+                <td>{{ publication.mail }}</td>
+                <td>{{ publication.photos }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('publication_show', { 'id': publication.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('publication_edit', { 'id': publication.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('publication_new') }}">Create a new publication</a>
+        </li>
+    </ul>
+{% endblock %}
