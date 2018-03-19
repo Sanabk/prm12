@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 use AppBundle\Entity\Annonce;
-use AppBundle\Form\Type\AnnonceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,18 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\View;
-use Symfony\Component\Validator\ConstraintViolationList;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\View\RouteRedirectView;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Hateoas\Configuration\Annotation as Hateoas;
 
@@ -89,6 +80,7 @@ class AnnonceController extends Controller
 
         return new Response('', Response::HTTP_CREATED);
     }
+
     /**
      *
      * @ApiDoc(
@@ -140,5 +132,50 @@ class AnnonceController extends Controller
         return new JsonResponse($response, 200);
     }
 
+    /**
+     *
+     * @ApiDoc(
+     *     description="Update annonce"
+     * )
+     * @param Request $request
+     * @param $id
+     * @Route("/annonce/{id}",name="update_annonce")
+     * @Method({"POST"})
+     * @return JsonResponse
+     */
+    public function updatePublication(Request $request, $id)
+    {
+        $annonce = $this->getDoctrine()->getRepository('AppBundle:Annonce')->find($id);
 
+        $data = [
+            'title' => $request->request->get('title'),
+            'description' => $request->request->get('description'),
+            'category' => $request->request->get('category'),
+            'city' => $request->request->get('city'),
+            'phone' => $request->request->get('phone'),
+            'picture' => $request->request->get('picture'),
+        ];
+
+        var_dump($data);
+
+        $annonce->setTitle($data['title']);
+        $annonce->setDescription($data['description']);
+        $annonce->setCategory($data['category']);
+        $annonce->setCity($data['city']);
+        $annonce->setPhone($data['phone']);
+        $annonce->setPicture($data['picture']);
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->merge($annonce);
+        $em->flush();
+
+        $response = array(
+            'code' => 0,
+            'message' => 'annonce updated!',
+            'errors' => null,
+            'result' => null
+        );
+        return new JsonResponse($response, 200);
+    }
 }
