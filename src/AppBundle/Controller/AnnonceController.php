@@ -38,13 +38,14 @@ use Hateoas\Configuration\Annotation as Hateoas;
  */
 class AnnonceController extends Controller
 {
+
     /**
      * @ApiDoc(
      *     resource=true,
      *     description="show a single pub by id"
      * )
      * @Get(
-     *     path = "/annonces/{id}",
+     *     path = "/api/annonces/{id}",
      *     name = "app_annonce_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -64,9 +65,33 @@ class AnnonceController extends Controller
 
     /**
      * @ApiDoc(
+     *     resource=true,
+     *     description="show a single pub by category"
+     * )
+     * @Get(
+     *     path = "/api/annonces/{category}",
+     *     name = "app_annonce_show",
+     *
+     * )
+     * @View
+     *
+     *
+     */
+    public function show1Action(Annonce $annonce)
+    {
+        $data = $this->get('jms_serializer')->serialize($annonce, 'json');
+
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
+    /**
+     * @ApiDoc(
      *     description="create new pub"
      * )
-     * @Route("/annonces", name="annonce_create")
+     * @Route("/api/annonces", name="annonce_create")
      * @Method({"POST"})
      */
     public function createAction(Request $request)
@@ -87,7 +112,7 @@ class AnnonceController extends Controller
      *     resource=true,
      *     description="show all pubs"
      * )
-     * @Route("/annonces", name="annone_list")
+     * @Route("/api/annonces", name="annone_list")
      * @Method({"GET"})
      */
     public function listAction()
@@ -105,7 +130,7 @@ class AnnonceController extends Controller
      * @ApiDoc(
      *     description="Delete pub by id"
      * )
-     * @Route("/annonces/{id}",name="delete_annonce")
+     * @Route("/api/annonces/{id}",name="delete_annonce")
      * @Method({"DELETE"})
      */
     public function deleteAction($id)
@@ -139,7 +164,7 @@ class AnnonceController extends Controller
      * )
      * @param Request $request
      * @param $id
-     * @Route("/annonce/{id}",name="update_annonce")
+     * @Route("/api/annonces/{id}",name="update_annonce")
      * @Method({"POST"})
      * @return JsonResponse
      */

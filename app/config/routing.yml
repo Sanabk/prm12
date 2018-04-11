@@ -28,3 +28,14 @@ api_login_check:
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
+
+# app/config/routing.yml
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/AdminController.php"
+    type:     annotation
+    prefix:   /admin
+
+register:
+    path: /api/register
+    defaults: { _controller: AppBundle:Register:register }
+    methods: POST

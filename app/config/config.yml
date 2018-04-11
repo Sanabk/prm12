@@ -64,7 +64,6 @@ doctrine:
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'
-    host: '%mailer_host%'
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
@@ -112,8 +111,8 @@ fos_user:
         address: "%mailer_user%"
         sender_name: "Test App"
     registration:
-            form:
-                name: app_user_registration
+        form:
+            name: app_user_registration
 
 #        confirmation:
 #            enabled: true
@@ -121,19 +120,21 @@ fos_user:
 #                address:        "%mailer_user%"
 #                sender_name:   "test"
 #            template:   FOSUserBundle:Registration:email.txt.twig
-    resetting:
-        email:
-            from_email:
-                address:        "%mailer_password%"
-                sender_name:    "Test App"
-            template:   email/password_resetting.email.twig
+#    resetting:
+#        email:
+#            from_email:
+#                address:        "%mailer_password%"
+#                sender_name:    "Test App"
+#            template:   email/password_resetting.email.twig
+
+
 lexik_jwt_authentication:
     private_key_path: '%kernel.root_dir%/../var/jwt/private.pem'
     public_key_path:  '%kernel.root_dir%/../var/jwt/public.pem'
     pass_phrase:      sana
     token_ttl:        3600
 
-nelmio_api_doc: ~
+
 
 nelmio_cors:
         defaults:
@@ -151,3 +152,13 @@ nelmio_cors:
                 allow_headers: ['*']
                 allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
                 max_age: 3600
+
+
+nelmio_api_doc: ~
+
+easy_admin:
+    entities:
+        - AppBundle\Entity\User
+        - AppBundle\Entity\Annonce
+    design:
+        brand_color: '#800000'

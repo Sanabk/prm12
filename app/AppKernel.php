@@ -24,6 +24,10 @@ class AppKernel extends Kernel
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
+            new EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle(),
+
+
+
 
         ];
 
