@@ -24,7 +24,7 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "jms/serializer-bundle": "^2.3",
         "lexik/jwt-authentication-bundle": "^2.4",
-        "nelmio/api-doc-bundle": "^2.13",
+        "nelmio/api-doc-bundle": "3.0",
         "nelmio/cors-bundle": "^1.5",
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/httplug-bundle": "^1.9",
@@ -60,7 +60,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.5.9"
+            "php": "7.0.23"
         },
         "sort-packages": true
     },

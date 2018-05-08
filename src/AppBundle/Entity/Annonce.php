@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToMany;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -48,11 +50,35 @@ class Annonce
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=255)
+     * @ORM\Column(name="categ", type="string", length=255)
      *
      * @Assert\NotBlank
      *
      */
+    private $categ;
+
+    /**
+     * @return mixed
+     */
+    public function getCateg()
+    {
+        return $this->categ;
+    }
+
+    /**
+     * @param mixed $categ
+     */
+    public function setCateg($categ)
+    {
+        $this->categ = $categ;
+    }
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="anoncateg")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+
     private $category;
 
     /**
@@ -86,6 +112,33 @@ class Annonce
      *
      * @return int
      */
+
+
+    /**
+     * @ManyToMany(targetEntity="User", mappedBy="annonces")
+     */
+    private $users;
+
+    /**
+     * @return mixed
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param mixed $users
+     */
+    public function setUsers($users)
+    {
+        $this->users = $users;
+    }
+
+    /**
+     * @return mixed
+     */
+
     public function getId()
     {
         return $this->id;
@@ -233,6 +286,16 @@ class Annonce
     public function getPicture()
     {
         return $this->picture;
+    }
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getTitle();
     }
 }
 

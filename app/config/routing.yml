@@ -25,9 +25,9 @@ fos_user:
 api_login_check:
     path: /api/login_check
 
-NelmioApiDocBundle:
-    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
-    prefix:   /api/doc
+#NelmioApiDocBundle:
+#    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+#    prefix:   /api/doc
 
 # app/config/routing.yml
 easy_admin_bundle:
@@ -35,7 +35,6 @@ easy_admin_bundle:
     type:     annotation
     prefix:   /admin
 
-register:
-    path: /api/register
-    defaults: { _controller: AppBundle:Register:register }
-    methods: POST
+
+nelmio:
+    resource: "routing/nelmio_api_doc.yml"

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 use AppBundle\Entity\Annonce;
+use AppBundle\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,9 +12,7 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\RestBundle\Controller\Annotations;
-use FOS\RestBundle\View\RouteRedirectView;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Swagger\Annotations as SWG;
 use Hateoas\Configuration\Annotation as Hateoas;
 
 
@@ -38,20 +37,21 @@ use Hateoas\Configuration\Annotation as Hateoas;
  */
 class AnnonceController extends Controller
 {
-
     /**
-     * @ApiDoc(
-     *     resource=true,
-     *     description="show a single pub by id"
-     * )
-     * @Get(
-     *     path = "/api/annonces/{id}",
-     *     name = "app_annonce_show",
-     *     requirements = {"id"="\d+"}
-     * )
-     * @View
+     * Get one service
+     *
+     * This call retrieves all services
+     *
+     * @Rest\Get("/api/annonces/{id}")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     * @SWG\Response(response=404,description="No Professional",)
+     *
+     * @SWG\Tag(name="annonce")
      *
      *
+     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
+     * @Rest\View(serializerGroups={"service"})
      */
     public function showAction(Annonce $annonce)
     {
@@ -63,61 +63,71 @@ class AnnonceController extends Controller
         return $response;
     }
 
-    /**
-     * @ApiDoc(
-     *     resource=true,
-     *     description="show a single pub by category"
-     * )
-     * @Get(
-     *     path = "/api/annonces/{category}",
-     *     name = "app_annonce_show",
-     *
-     * )
-     * @View
-     *
-     *
-     */
-    public function show1Action(Annonce $annonce)
-    {
-        $data = $this->get('jms_serializer')->serialize($annonce, 'json');
-
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
-    }
 
     /**
-     * @ApiDoc(
-     *     description="create new pub"
-     * )
-     * @Route("/api/annonces", name="annonce_create")
-     * @Method({"POST"})
+     * create service
+     *
+     *
+     * @Rest\Post("/api/annonces")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     *
+     * @SWG\Tag(name="service")
+     *
+     * @param Request $request
+     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
+     * @Rest\View()
      */
+
     public function createAction(Request $request)
     {
-        $data = $request->getContent();
-        $annonce = $this->get('jms_serializer')->deserialize($data, 'AppBundle\Entity\Annonce', 'json');
+        $aOptions = $request->request->all();
+
 
         $em = $this->getDoctrine()->getManager();
+        $categorie = $em->getRepository('AppBundle:Category')
+            ->findOneBy(['name' => $aOptions['category']]);
+        $annonce = new Annonce();
+        $annonce->setTitle($aOptions['title']);
+        $annonce->setDescription($aOptions['description']);
+        $annonce->setCity($aOptions['city']);
+        $annonce->setPicture($aOptions['picture']);
+        $annonce->setPhone($aOptions['phone']);
+        $annonce->setCategory($categorie);
+        $annonce->setCateg($aOptions['category']);
+
+        // persist data
+
         $em->persist($annonce);
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $user ->getAnnonces()->add($annonce);
         $em->flush();
 
-        return new Response('', Response::HTTP_CREATED);
+        return $this->setResponse(200, 'Success');
+
+
     }
 
     /**
+     * Get all services
      *
-     * @ApiDoc(
-     *     resource=true,
-     *     description="show all pubs"
-     * )
-     * @Route("/api/annonces", name="annone_list")
-     * @Method({"GET"})
+     * This call retrieves all services
+     *
+     * @Rest\Get("/api/annonces")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     * @SWG\Response(response=404,description="No Professional",)
+     *
+     * @SWG\Tag(name="annonce")
+     *
+     *
+     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
+     * @Rest\View(serializerGroups={"service"})
      */
     public function listAction()
     {
-        $annonces = $this->getDoctrine()->getRepository('AppBundle:Annonce')->findAll();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $annonces = $user->getAnnonces();
         $data = $this->get('jms_serializer')->serialize($annonces, 'json');
 
         $response = new Response($data);
@@ -125,14 +135,22 @@ class AnnonceController extends Controller
 
         return $response;
     }
-
     /**
-     * @ApiDoc(
-     *     description="Delete pub by id"
-     * )
-     * @Route("/api/annonces/{id}",name="delete_annonce")
-     * @Method({"DELETE"})
+     * delete one services
+     *
+     * This call deletes selected services
+     *
+     * @Rest\Delete("/api/annonces/{id}")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     *
+     * @SWG\Tag(name="annonce")
+     *
+     *
+     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
+     * @Rest\View(serializerGroups={"service"})
      */
+
     public function deleteAction($id)
     {
         $annonce = $this->getDoctrine()->getRepository('AppBundle:Annonce')->find($id);
@@ -156,18 +174,21 @@ class AnnonceController extends Controller
         );
         return new JsonResponse($response, 200);
     }
-
     /**
+     * update service
      *
-     * @ApiDoc(
-     *     description="Update annonce"
-     * )
+     *
+     * @Rest\Post("/api/annonces/{id}")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     *
+     * @SWG\Tag(name="service")
+     *
      * @param Request $request
-     * @param $id
-     * @Route("/api/annonces/{id}",name="update_annonce")
-     * @Method({"POST"})
-     * @return JsonResponse
+     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
+     * @Rest\View()
      */
+
     public function updatePublication(Request $request, $id)
     {
         $annonce = $this->getDoctrine()->getRepository('AppBundle:Annonce')->find($id);
