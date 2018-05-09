@@ -5,7 +5,7 @@ AppBundle\Entity\Client:
         username:
             - NotBlank: ~
             - Type: string
-        email:
+        mail:
             - NotBlank: ~
             - Type: string
         type:

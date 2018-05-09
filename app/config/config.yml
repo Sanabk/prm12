@@ -111,7 +111,7 @@ fos_user:
     service:                               # this lines
         mailer: fos_user.mailer.twig_swift # this lines
     from_email:
-        address: "%mailer_user%"
+        address: "testapp@testapp.com"
         sender_name: "Test App"
     registration:
         form:

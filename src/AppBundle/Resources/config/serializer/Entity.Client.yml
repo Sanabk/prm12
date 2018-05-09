@@ -5,7 +5,7 @@ AppBundle\Entity\Client:
             groups: ['client', 'auth-token']
         username:
             groups: ['client', 'auth-token']
-        email:
+        mail:
             groups: ['client', 'auth-token']
         type:
             groups: ['client', 'auth-token']
