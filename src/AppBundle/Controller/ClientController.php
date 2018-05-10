@@ -131,7 +131,7 @@ class ClientController extends ApiBaseController
 
     /**
      * Forget password
-     * @Rest\Post("/client/forget-password")
+     * @Rest\Post("/user/forget-password")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=400,description="Missing  parameter",)
@@ -369,13 +369,12 @@ class ClientController extends ApiBaseController
         $authToken = new AuthToken();
         $authToken->setValue(base64_encode(random_bytes(50)));
         $authToken->setCreatedAt(new \DateTime('now'));
-        $authToken->setUser($Client);
+        $authToken->setClient($Client);
 
         $em->persist($authToken);
         $em->flush();
 
-        return $this->setResponse(200, 'Success', $authToken);
-        //return $authToken;
+        return $this->setResponse(200, 'success', ['token'=>$authToken->getValue()]);
     }
 
 
@@ -519,37 +518,37 @@ class ClientController extends ApiBaseController
     }
 
 
-    /**
-     * Get Client
-     *
-     * This call retrieves  client
-     *
-     * @Rest\Get("/client/get-client/use/{id}")
-     *
-     * @SWG\Response(response=200,description="Success",)
-     * @SWG\Response(response=404,description="No client",)
-     *
-     * @SWG\Tag(name="Client")
-     *
-     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
-     * @Rest\View(serializerGroups={"login-admin"})
-     */
-
-    public function getClientAction($id)
-    {
-        $em = $this->get('doctrine.orm.entity_manager');
-
-        $aClients = $em->getRepository('AppBundle:Admin')->find($id);
-
-        if (!$aClients) {
-
-            return $this->setResponse(400, 'No client found');
-
-        }
-        return $this->setResponse(200, 'Success', ['clients' => $aClients]);
-
-    }
-
+//    /**
+//     * Get Client
+//     *
+//     * This call retrieves  client
+//     *
+//     * @Rest\Get("/client/get-client/use/{id}")
+//     *
+//     * @SWG\Response(response=200,description="Success",)
+//     * @SWG\Response(response=404,description="No client",)
+//     *
+//     * @SWG\Tag(name="Client")
+//     *
+//     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
+//     * @Rest\View(serializerGroups={"login-admin"})
+//     */
+//
+//    public function getClientAction($id)
+//    {
+//        $em = $this->get('doctrine.orm.entity_manager');
+//
+//        $aClients = $em->getRepository('AppBundle:Admin')->find($id);
+//
+//        if (!$aClients) {
+//
+//            return $this->setResponse(400, 'No client found');
+//
+//        }
+//        return $this->setResponse(200, 'Success', ['clients' => $aClients]);
+//
+//    }
+//
 
 
     /**

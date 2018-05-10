@@ -1,10 +1,7 @@
 <?php
-
 namespace AppBundle\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
-
 /**
  * AuthToken
  *
@@ -21,14 +18,12 @@ class AuthToken
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @var string
      *
      * @ORM\Column(name="value", type="string", length=255)
      */
     private $value;
-
     /**
      * @var \DateTime
      *
@@ -37,46 +32,19 @@ class AuthToken
     private $createdAt;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="token", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Client")
+     * @var client
      */
-    private $token;
-
-    /**
-     * @return users
-     */
-    public function getUsers(): users
-    {
-        return $this->users;
-    }
-
-    /**
-     * @param users $users
-     */
-    public function setUsers(users $users)
-    {
-        $this->users = $users;
-    }
-
-
+    protected $client;
     /**
      * Get id
      *
      * @return int
      */
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Users")
-     * @var users
-     */
-    protected $users;
-
     public function getId()
     {
         return $this->id;
     }
-
     /**
      * Set value
      *
@@ -87,10 +55,8 @@ class AuthToken
     public function setValue($value)
     {
         $this->value = $value;
-
         return $this;
     }
-
     /**
      * Get value
      *
@@ -100,7 +66,6 @@ class AuthToken
     {
         return $this->value;
     }
-
     /**
      * Set createdAt
      *
@@ -111,10 +76,8 @@ class AuthToken
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
-
     /**
      * Get createdAt
      *
@@ -124,30 +87,18 @@ class AuthToken
     {
         return $this->createdAt;
     }
-
     /**
-     * Set token
-     *
-     * @param string $token
-     *
-     * @return AuthToken
+     * @return client
      */
-    public function setToken($token)
+    public function getClient()
     {
-        $this->token = $token;
-
-        return $this;
+        return $this->client;
     }
-
     /**
-     * Get token
-     *
-     * @return string
+     * @param client $client
      */
-    public function getToken()
+    public function setClient($client)
     {
-        return $this->token;
+        $this->client = $client;
     }
-
 }
-
