@@ -10,12 +10,12 @@ namespace AppBundle\Repository;
  */
 class ReclamationRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByUser($user){
-        $query = $this->createQueryBuilder('reclamation')
-            ->innerJoin('reclamation.users','user')
-            ->where('user.id = :userParam')
-            ->setParameter('userParam',$user->getId());
-
-        var_dump($query->getQuery()->getResult());die;
-    }
+//    public function findByUser($user){
+//        $query = $this->createQueryBuilder('reclamation')
+//            ->innerJoin('reclamation.users','user')
+//            ->where('user.id = :userParam')
+//            ->setParameter('userParam',$user->getId());
+//
+//        var_dump($query->getQuery()->getResult());die;
+//    }
 }

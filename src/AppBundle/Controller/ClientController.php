@@ -318,7 +318,7 @@ class ClientController extends ApiBaseController
      *
      * @param Request $request
      * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
-     * @Rest\View(serializerGroups={"login-user"})
+     * @Rest\View(serializerGroups={"auth-token"})
      */
 
     public function loginAction(Request $request)
@@ -374,7 +374,7 @@ class ClientController extends ApiBaseController
         $em->persist($authToken);
         $em->flush();
 
-        return $this->setResponse(200, 'success', ['token'=>$authToken->getValue()]);
+        return $this->setResponse(200, 'success', ['token'=>$authToken]);
     }
 
 

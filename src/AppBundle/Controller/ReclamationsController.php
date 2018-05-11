@@ -17,7 +17,7 @@ class ReclamationsController extends Controller
      * create new reclamation
      *
      *
-     * @Rest\Post("/api/reclamations")
+     * @Rest\Post("/reclamations")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -36,10 +36,10 @@ class ReclamationsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($reclamation);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $user ->getReclamations()->add($reclamation);
+        $reclamation->setUser($user);
         $em->flush();
 
-        return new Response('', Response::HTTP_CREATED);
+        return new Response('success', Response::HTTP_CREATED);
     }
 
     /**
@@ -47,7 +47,7 @@ class ReclamationsController extends Controller
      *
      * This call retrieves all reclamations
      *
-     * @Rest\Get("/api/reclamations")
+     * @Rest\Get("/reclamations")
      *
      * @SWG\Response(response=200,description="Success",)
      *

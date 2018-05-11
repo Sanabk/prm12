@@ -57,20 +57,8 @@ security:
             anonymous: true
             stateless: true
 
-
-        main:
-#            anonymous: ~
-#            http_basic: ~
-            pattern: ^/
-            form_login:
-                provider: fos_userbundle
-                csrf_token_generator: security.csrf.token_manager
-
-            logout:       true
-            anonymous:    true
-
         client:
-            pattern: ^/api/user/
+            pattern: ^/
             stateless: true
             simple_preauth:
                 authenticator: auth_token_authenticator

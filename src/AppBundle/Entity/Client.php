@@ -2,7 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToMany;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -75,6 +77,54 @@ class Client implements UserInterface
      * @ORM\Column(name="code", type="string")
      */
     private $code;
+
+    /**
+     * @OneToMany(targetEntity="AppBundle\Entity\Reclamation", mappedBy="user")
+     */
+    private $reclamations;
+
+    /**
+     * @return mixed
+     */
+    public function getReclamations()
+    {
+        return $this->reclamations;
+    }
+
+    /**
+     * @param mixed $reclamations
+     */
+    public function setReclamations($reclamations)
+    {
+        $this->reclamations = $reclamations;
+    }
+    /**
+     * @OneToMany(targetEntity="AppBundle\Entity\Annonce", mappedBy="user")
+     */
+    private $annonces;
+
+    /**
+     * @return mixed
+     */
+    public function getAnnonces()
+    {
+        return $this->annonces;
+    }
+
+    /**
+     * @param mixed $annonces
+     */
+    public function setAnnonces($annonces)
+    {
+        $this->annonces = $annonces;
+    }
+
+
+    public function __construct()
+    {
+        $this->reclamations = new ArrayCollection();
+        $this->annonces = new ArrayCollection();
+    }
 
 
     /**

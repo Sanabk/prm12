@@ -4,7 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -106,7 +107,27 @@ class Annonce
      */
     private $picture;
 
+    /**
+     * @ManyToOne(targetEntity="AppBundle\Entity\Client", inversedBy="annonces")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
 
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
     /**
      * Get id
      *
@@ -114,26 +135,6 @@ class Annonce
      */
 
 
-    /**
-     * @ManyToMany(targetEntity="User", mappedBy="annonces")
-     */
-    private $users;
-
-    /**
-     * @return mixed
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
-
-    /**
-     * @param mixed $users
-     */
-    public function setUsers($users)
-    {
-        $this->users = $users;
-    }
 
     /**
      * @return mixed
@@ -288,10 +289,6 @@ class Annonce
         return $this->picture;
     }
 
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
 
     public function __toString()
     {

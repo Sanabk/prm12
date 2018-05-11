@@ -38,7 +38,7 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
             return;
 
         $authTokenHeader = $request->headers->get('X-Auth-Token');
-
+//        var_dump($authTokenHeader);die;
         if (!$authTokenHeader) {
             throw new BadCredentialsException('X-Auth-Token header is required');
         }
@@ -64,6 +64,7 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
 
         $authTokenHeader = rawurldecode($token->getCredentials());
         $authToken = $userProvider->getAuthToken($authTokenHeader);
+//        var_dump($authToken);die;
 
         if (!$authToken || !$this->isTokenValid($authToken)) {
             throw new BadCredentialsException('Invalid authentication token');

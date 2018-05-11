@@ -42,7 +42,7 @@ class AnnonceController extends Controller
      *
      * This call retrieves all services
      *
-     * @Rest\Get("/api/annonces/{id}")
+     * @Rest\Get("/annonces/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=404,description="No Professional",)
@@ -68,7 +68,7 @@ class AnnonceController extends Controller
      * create service
      *
      *
-     * @Rest\Post("/api/annonces")
+     * @Rest\Post("/annonces")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -100,7 +100,7 @@ class AnnonceController extends Controller
 
         $em->persist($annonce);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $user ->getAnnonces()->add($annonce);
+//        $annonce->setUser($user);
         $em->flush();
 
         return $this->setResponse(200, 'Success');
@@ -113,7 +113,7 @@ class AnnonceController extends Controller
      *
      * This call retrieves all services
      *
-     * @Rest\Get("/api/annonces")
+     * @Rest\Get("/annonces")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=404,description="No Professional",)
@@ -140,7 +140,7 @@ class AnnonceController extends Controller
      *
      * This call deletes selected services
      *
-     * @Rest\Delete("/api/annonces/{id}")
+     * @Rest\Delete("/annonces/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -178,7 +178,7 @@ class AnnonceController extends Controller
      * update service
      *
      *
-     * @Rest\Post("/api/annonces/{id}")
+     * @Rest\Post("/annonces/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      *

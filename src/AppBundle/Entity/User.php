@@ -80,64 +80,64 @@ class User extends BaseUser
 
 
 
-    /**
-     * @ManyToMany(targetEntity="Annonce", inversedBy="users")
-     * @JoinTable(name="users_annonces")
-     */
-
-    private $annonces;
-    /**
-     * @ManyToMany(targetEntity="Reclamation", inversedBy="users")
-     * @JoinTable(name="users_reclamations")
-     */
-
-    private $reclamations;
-
-    /**
-     * @return mixed
-     */
-    public function getReclamations()
-    {
-        return $this->reclamations;
-    }
-
-    /**
-     * @param mixed $reclamations
-     */
-    public function setReclamations($reclamations)
-    {
-        $this->reclamations = $reclamations;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAnnonces()
-    {
-        return $this->annonces;
-    }
-
-    /**
-     * @param mixed $annonces
-     */
-    public function setAnnonces($annonces)
-    {
-        $this->annonces = $annonces;
-    }
-
-    public function __construct()
-    {
-        parent::__construct();
-        // your own logic
-        $this->annonces = new ArrayCollection();
-    }
-
-    public function __construct1()
-    {
-        parent::__construct();
-        // your own logic
-        $this->reclamations = new ArrayCollection();
-    }
+//    /**
+//     * @ManyToMany(targetEntity="Annonce", inversedBy="users")
+//     * @JoinTable(name="users_annonces")
+//     */
+//
+//    private $annonces;
+//    /**
+//     * @ManyToMany(targetEntity="Reclamation", inversedBy="users")
+//     * @JoinTable(name="users_reclamations")
+//     */
+//
+//    private $reclamations;
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getReclamations()
+//    {
+//        return $this->reclamations;
+//    }
+//
+//    /**
+//     * @param mixed $reclamations
+//     */
+//    public function setReclamations($reclamations)
+//    {
+//        $this->reclamations = $reclamations;
+//    }
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getAnnonces()
+//    {
+//        return $this->annonces;
+//    }
+//
+//    /**
+//     * @param mixed $annonces
+//     */
+//    public function setAnnonces($annonces)
+//    {
+//        $this->annonces = $annonces;
+//    }
+//
+//    public function __construct()
+//    {
+//        parent::__construct();
+//        // your own logic
+//        $this->annonces = new ArrayCollection();
+//    }
+//
+//    public function __construct1()
+//    {
+//        parent::__construct();
+//        // your own logic
+//        $this->reclamations = new ArrayCollection();
+//    }
 //    /**
 //     * Set type
 //     *

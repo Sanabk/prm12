@@ -4,7 +4,9 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
  * Reclamation
@@ -37,28 +39,29 @@ class Reclamation
      */
     private $context;
 
+
+
     /**
-     * @ManyToMany(targetEntity="User", mappedBy="reclamations")
+     * @ManyToOne(targetEntity="AppBundle\Entity\Client", inversedBy="reclamations")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $users;
+    private $user;
 
     /**
      * @return mixed
      */
-    public function getUsers()
+    public function getUser()
     {
-        return $this->users;
+        return $this->user;
     }
 
     /**
-     * @param mixed $users
+     * @param mixed $user
      */
-    public function setUsers($users)
+    public function setUser($user)
     {
-        $this->users = $users;
+        $this->user = $user;
     }
-
-
     /**
      * Get id
      *
@@ -115,10 +118,6 @@ class Reclamation
     public function getContext()
     {
         return $this->context;
-    }
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
     }
 
 }
