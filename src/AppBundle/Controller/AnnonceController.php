@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 use AppBundle\Entity\Annonce;
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,6 +38,44 @@ use Hateoas\Configuration\Annotation as Hateoas;
  */
 class AnnonceController extends Controller
 {
+
+    /**
+     * Get all annonces
+     *
+     * This call retrieves all services
+     *
+     * @Rest\Get("/ttannonces")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     * @SWG\Response(response=404,description="No Professional",)
+     *
+     * @SWG\Tag(name="annonces")
+     *
+     *
+     * @return Response
+     * @Rest\View(serializerGroups={"service"})
+     */
+    public function listAction()
+    {
+        $demandes=$this->getDoctrine()->getRepository('AppBundle:Annonce')->findAll();
+        if (!count($demandes)){
+            $response=array(
+                'code'=>1,
+                'message'=>'No requests found!',
+                'errors'=>null,
+                'result'=>null
+            );
+            return new JsonResponse($response, Response::HTTP_NOT_FOUND);
+        }
+        $data=$this->get('jms_serializer')->serialize($demandes,'json');
+        $response=array(
+            'code'=>0,
+            'message'=>'success',
+            'errors'=>null,
+            'result'=>json_decode($data)
+        );
+        return new JsonResponse($response,200);
+    }
     /**
      * Get one service
      *
@@ -55,6 +94,7 @@ class AnnonceController extends Controller
      */
     public function showAction(Annonce $annonce)
     {
+
         $data = $this->get('jms_serializer')->serialize($annonce, 'json');
 
         $response = new Response($data);
@@ -96,14 +136,14 @@ class AnnonceController extends Controller
         $annonce->setCategory($categorie);
         $annonce->setCateg($aOptions['category']);
 
-        // persist data
 
-        $em->persist($annonce);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-//        $annonce->setUser($user);
+        $annonce->setUser($user);
+        // persist data
+        $em->persist($annonce);
         $em->flush();
 
-        return $this->setResponse(200, 'Success');
+        return  new Response('service created successfully',  Response::HTTP_CREATED);
 
 
     }
@@ -124,7 +164,7 @@ class AnnonceController extends Controller
      * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
      * @Rest\View(serializerGroups={"service"})
      */
-    public function listAction()
+    public function lisstAction()
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $annonces = $user->getAnnonces();
@@ -224,4 +264,5 @@ class AnnonceController extends Controller
         );
         return new JsonResponse($response, 200);
     }
+
 }

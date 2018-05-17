@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -106,6 +107,27 @@ class Annonce
      * @ORM\Column(name="Picture", type="string", length=255)
      */
     private $picture;
+    /**
+     * @OneToMany(targetEntity="AppBundle\Entity\Listreq", mappedBy="service")
+     */
+    private $req;
+
+    /**
+     * @return mixed
+     */
+    public function getReq()
+    {
+        return $this->req;
+    }
+
+    /**
+     * @param mixed $req
+     */
+    public function setReq($req)
+    {
+        $this->req = $req;
+    }
+
 
     /**
      * @ManyToOne(targetEntity="AppBundle\Entity\Client", inversedBy="annonces")
@@ -293,6 +315,10 @@ class Annonce
     public function __toString()
     {
         return $this->getTitle();
+    }
+    public function __construct()
+    {
+        $this->req = new ArrayCollection();
     }
 }
 

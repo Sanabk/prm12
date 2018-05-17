@@ -39,7 +39,7 @@ easy_admin_bundle:
 nelmio:
     resource: "routing/nelmio_api_doc.yml"
 
-register:
+login:
     path:     /user/login
     defaults: { _controller: AppBundle:Client:login }
 

@@ -102,6 +102,26 @@ class Client implements UserInterface
      * @OneToMany(targetEntity="AppBundle\Entity\Annonce", mappedBy="user")
      */
     private $annonces;
+    /**
+     * @OneToMany(targetEntity="AppBundle\Entity\Disponibilities", mappedBy="prof")
+     */
+    private $dispo;
+
+    /**
+     * @return mixed
+     */
+    public function getDispo()
+    {
+        return $this->dispo;
+    }
+
+    /**
+     * @param mixed $dispo
+     */
+    public function setDispo($dispo)
+    {
+        $this->dispo = $dispo;
+    }
 
     /**
      * @return mixed
