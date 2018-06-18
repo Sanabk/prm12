@@ -28,7 +28,7 @@ class Client implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    private $plainPassword;
     /**
      * @var string
      *
@@ -106,6 +106,26 @@ class Client implements UserInterface
      * @OneToMany(targetEntity="AppBundle\Entity\Disponibilities", mappedBy="prof")
      */
     private $dispo;
+    /**
+     * @OneToMany(targetEntity="AppBundle\Entity\Listreq", mappedBy="user")
+     */
+    private $rdv;
+
+    /**
+     * @return mixed
+     */
+    public function getRdv()
+    {
+        return $this->rdv;
+    }
+
+    /**
+     * @param mixed $rdv
+     */
+    public function setRdv($rdv)
+    {
+        $this->rdv = $rdv;
+    }
 
     /**
      * @return mixed
@@ -144,6 +164,9 @@ class Client implements UserInterface
     {
         $this->reclamations = new ArrayCollection();
         $this->annonces = new ArrayCollection();
+        $this->rdv = new ArrayCollection();
+        $this->dispo = new ArrayCollection();
+
     }
 
 

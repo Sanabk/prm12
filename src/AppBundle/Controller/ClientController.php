@@ -8,6 +8,7 @@ use AppBundle\Entity\Client;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\AuthToken;
 //use AppBundle\Services\CodeGenerator;
 //use AppBundle\Utils\AppTools;
@@ -128,6 +129,33 @@ class ClientController extends ApiBaseController
 
 
     }
+    /**
+     * Get one user
+     *
+     * This call retrieves all services
+     *
+     * @Rest\Get("/user/{id}")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     * @SWG\Response(response=404,description="No Professional",)
+     *
+     * @SWG\Tag(name="user")
+     *
+     *
+     * @return array|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|static
+     * @Rest\View(serializerGroups={"user"})
+     */
+    public function showAction(Client $user)
+    {
+
+        $data = $this->get('jms_serializer')->serialize($user, 'json');
+
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
+
 
     /**
      * Forget password
@@ -232,6 +260,7 @@ class ClientController extends ApiBaseController
         if (!$request->request->has('password'))
             return $this->setResponse(400, 'Missing password parameter');
 
+
         if (!$request->request->get(('password')))
             return $this->setResponse(401, 'Password parameter should not be blank');
 
@@ -258,7 +287,7 @@ class ClientController extends ApiBaseController
             ]);
         //$encoder = $this->get('security.password_encoder');
         //$encoded = $encoder->encodePassword($oUser,$aOptions['password']);
-        dump($oUser->getPassword());
+        $oUser->getPassword();
         if ($request->request->has('newpassword') && $request->request->has('newpasswordconfirmation')) {
             if ($request->request->get('newpassword') == $request->request->get('newpasswordconfirmation')) {
                 $encoder = $this->get('security.password_encoder');

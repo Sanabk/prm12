@@ -18,7 +18,7 @@ class DisponibilitiesController extends Controller
      * create Dispo
      *
      *
-     * @Rest\Post("/create/dispo")
+     * @Rest\Post("/user/create/dispo")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -36,14 +36,14 @@ class DisponibilitiesController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $prf = $em->getRepository('AppBundle:Client')
-             ->findOneBy(['id' => $aOptions['day']]);
+             ->findOneBy(['id' => $aOptions['Day']]);
 
         $dispo = new Disponibilities();
-        $dispo->setDay($aOptions['day']);
-        $dispo->setFromo($aOptions['fromo']);
-        $dispo->setToo($aOptions['too']);
-        $dispo->setFromt($aOptions['fromt']);
-        $dispo->setTot($aOptions['tot']);
+        $dispo->setDay($aOptions['Day']);
+        $dispo->setFromo($aOptions['Fromo']);
+        $dispo->setToo($aOptions['Too']);
+        $dispo->setFromt($aOptions['Fromt']);
+        $dispo->setTot($aOptions['Tot']);
         $dispo->setProf($prf);
 
 
@@ -63,7 +63,7 @@ class DisponibilitiesController extends Controller
      *
      * This call retrieves all services
      *
-     * @Rest\Get("/list/dispo")
+     * @Rest\Get("/user/list/dispo/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=404,description="No Professional",)
@@ -72,9 +72,11 @@ class DisponibilitiesController extends Controller
      * @return Response
      * @Rest\View(serializerGroups={"dispo"})
      */
-    public function listAction()
+    public function listAction($id)
     {
-        $dispon=$this->getDoctrine()->getRepository('AppBundle:Disponibilities')->findAll();
+        $user = $this->getDoctrine()->getRepository('AppBundle:Client')->find($id);
+
+        $dispon=$this->getDoctrine()->getRepository('AppBundle:Disponibilities')->findBy(array('prof'=> $user));
         if (!count($dispon)){
             $response=array(
                 'code'=>1,
@@ -91,6 +93,8 @@ class DisponibilitiesController extends Controller
             'errors'=>null,
             'result'=>json_decode($data)
         );
+
+
         return new JsonResponse($response,200);
     }
 

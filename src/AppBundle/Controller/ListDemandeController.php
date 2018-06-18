@@ -17,7 +17,7 @@ class ListDemandeController extends Controller
      * create service
      *
      *
-     * @Rest\Post("/demandes")
+     * @Rest\Post("/user/demandes")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -30,21 +30,23 @@ class ListDemandeController extends Controller
 
     public function createAction(Request $request)
     {
-
         $aOptions = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $service = $em->getRepository('AppBundle:Annonce')
-            ->findOneBy(['id' => $aOptions['jour']]);
+            ->findOneBy(['id' => $aOptions['service_id']]);
 
         $demande = new Listreq();
         $demande->setJour($aOptions['jour']);
-        $demande->setFrom($aOptions['from']);
-        $demande->setTo($aOptions['to']);
+        $demande->setFromo($aOptions['fromo']);
+        $demande->setToon($aOptions['toon']);
         $demande->setSubject($aOptions['subject']);
         $demande->setService($service);
         $demande->setValid(0);
 
         // persist data
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $demande->setUser($user);
 
         $em->persist($demande);
         $em->flush();
@@ -60,7 +62,7 @@ class ListDemandeController extends Controller
      *
      * This call retrieves all services
      *
-     * @Rest\Get("/demandes")
+     * @Rest\Get("/user/list/demandes")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=404,description="No Professional",)
@@ -98,7 +100,7 @@ class ListDemandeController extends Controller
      *
      * This call deletes selected services
      *
-     * @Rest\Delete("/demnades/{id}")
+     * @Rest\Delete("/user/delete/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -135,7 +137,7 @@ class ListDemandeController extends Controller
 
     /**
      * request Validation
-     * @Rest\POST("/valid-req")
+     * @Rest\POST("/user/valid-req")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=400,description="Missing  parameter",)
@@ -162,13 +164,54 @@ class ListDemandeController extends Controller
                 'id' => $id,
             ]);
 
-        $oUser->setValid(1);
+        $oUser->setValid(true);
 
         $em->persist($oUser);
         $em->flush();
 
-        return  new Response('set valid to one',  Response::HTTP_CREATED);
+        return  new Response('valid is set to one',  Response::HTTP_CREATED);
 
 
     }
+    /**
+     * Get all requests
+     *
+     * This call retrieves all services
+     *
+     * @Rest\Get("/user/list/rdv/{id}")
+     *
+     * @SWG\Response(response=200,description="Success",)
+     * @SWG\Response(response=404,description="No Professional",)
+     *
+     * @SWG\Tag(name="demandes")
+     *
+     *
+     * @return Response
+     * @Rest\View(serializerGroups={"demande"})
+     */
+    public function lisAction($id)
+    {
+        $service = $this->getDoctrine()->getRepository('AppBundle:Annonce')->find($id);
+
+        $demandes=$this->getDoctrine()->getRepository('AppBundle:Listreq')->findBy(array('service'=> $service));
+        if (!count($demandes)){
+            $response=array(
+                'code'=>1,
+                'message'=>'No posts found!',
+                'errors'=>null,
+                'result'=>null
+            );
+            return new JsonResponse($response, Response::HTTP_NOT_FOUND);
+        }
+        $data=$this->get('jms_serializer')->serialize($demandes,'json');
+        $response=array(
+            'code'=>0,
+            'message'=>'success',
+            'errors'=>null,
+            'result'=>json_decode($data)
+        );
+        return new JsonResponse($response,200);
+    }
+
+
 }

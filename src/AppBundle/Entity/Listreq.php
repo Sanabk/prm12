@@ -55,22 +55,22 @@ class Listreq
 
     /**
      * @var string
-     *
+     *f
      * @ORM\Column(name="jour", type="string", length=255)
      */
     private $jour;
     /**
      * @var string
      *
-     * @ORM\Column(name="from", type="string", length=255)
+     * @ORM\Column(name="fromo", type="string", length=255)
      */
-    private $from;
+    private $fromo;
     /**
      * @var string
      *
-     * @ORM\Column(name="to", type="string", length=255)
+     * @ORM\Column(name="toon", type="string", length=255)
      */
-    private $to;
+    private $toon;
     /**
      * @var string
      *
@@ -94,37 +94,6 @@ class Listreq
         $this->valid = $valid;
     }
 
-    /**
-     * @return string
-     */
-    public function getTo(): string
-    {
-        return $this->to;
-    }
-
-    /**
-     * @param string $to
-     */
-    public function setTo(string $to)
-    {
-        $this->to = $to;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFrom(): string
-    {
-        return $this->from;
-    }
-
-    /**
-     * @param string $from
-     */
-    public function setFrom(string $from)
-    {
-        $this->from = $from;
-    }
 
 
     /**
@@ -183,6 +152,59 @@ class Listreq
     public function getJour()
     {
         return $this->Jour;
+    }
+    /**
+     * @ManyToOne(targetEntity="AppBundle\Entity\Client", inversedBy="rdv")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToon(): string
+    {
+        return $this->toon;
+    }
+
+    /**
+     * @param string $toon
+     */
+    public function setToon(string $toon)
+    {
+        $this->toon = $toon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromo(): string
+    {
+        return $this->fromo;
+    }
+
+    /**
+     * @param string $fromo
+     */
+    public function setFromo(string $fromo)
+    {
+        $this->fromo = $fromo;
     }
 }
 

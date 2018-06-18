@@ -160,30 +160,26 @@ nelmio_cors:
 #nelmio_api_doc: ~
 
 easy_admin:
-    site_name: Pro<i>Matching</i>
+    site_name: Pro<i>Match</i>
     entities:
         User:
-            class: AppBundle\Entity\User
-            disabled_actions: ['edit','new']
-#            list:
-#                fields: ['id', 'username', 'email', 'enabled', 'last login']
+            class: AppBundle\Entity\Client
+            list:
+                 fields: ['id', 'username', 'type', 'mail']
 
-#            new:
-#                fields:
-#                     - '-id'
-#                     - { property: 'name', type_options: { required: false } }
-#            edit:
-#                fields:
-#                     - { property: 'name', icon: 'Category' }
+            disabled_actions: ['edit','new']
 
         Reclamation:
             class: AppBundle\Entity\Reclamation
             list:
-                 fields: ['id', 'title', 'conte']
+                 fields: ['id', 'title', 'context']
 
             disabled_actions: ['edit','new']
+
         Service:
             class: AppBundle\Entity\Annonce
+            disabled_actions: ['edit','new']
+
         Category:
              class: AppBundle\Entity\Category
              list:
@@ -196,6 +192,7 @@ easy_admin:
              edit:
                  fields:
                      - { property: 'name', icon: 'Category' }
+
 
 
     design:

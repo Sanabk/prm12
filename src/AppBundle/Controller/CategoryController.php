@@ -18,7 +18,7 @@ class CategoryController extends Controller
      *
      * This call retrieves all categories
      *
-     * @Rest\Get("/category")
+     * @Rest\Get("/user/category")
      *
      * @SWG\Response(response=200,description="Success",)
      *

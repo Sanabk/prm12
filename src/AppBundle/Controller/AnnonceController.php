@@ -44,7 +44,7 @@ class AnnonceController extends Controller
      *
      * This call retrieves all services
      *
-     * @Rest\Get("/ttannonces")
+     * @Rest\Get("/user/annonces/all")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=404,description="No Professional",)
@@ -57,31 +57,39 @@ class AnnonceController extends Controller
      */
     public function listAction()
     {
-        $demandes=$this->getDoctrine()->getRepository('AppBundle:Annonce')->findAll();
-        if (!count($demandes)){
-            $response=array(
-                'code'=>1,
-                'message'=>'No requests found!',
-                'errors'=>null,
-                'result'=>null
-            );
-            return new JsonResponse($response, Response::HTTP_NOT_FOUND);
-        }
-        $data=$this->get('jms_serializer')->serialize($demandes,'json');
-        $response=array(
-            'code'=>0,
-            'message'=>'success',
-            'errors'=>null,
-            'result'=>json_decode($data)
-        );
-        return new JsonResponse($response,200);
+//        $demandes=$this->getDoctrine()->getRepository('AppBundle:Annonce')->findAll();
+//        if (!count($demandes)){
+//            $response=array(
+//                'code'=>1,
+//                'message'=>'No requests found!',
+//                'errors'=>null,
+//                'result'=>null
+//            );
+//            return new JsonResponse($response, Response::HTTP_NOT_FOUND);
+//        }
+//        $data=$this->get('jms_serializer')->serialize($demandes,'json');
+//        $response=array(
+//            'code'=>0,
+//            'message'=>'success',
+//            'errors'=>null,
+//            'result'=>json_decode($data)
+//        );
+//        return new JsonResponse($response,200);
+         $annonces=$this->getDoctrine()->getRepository('AppBundle:Annonce')->findAll();
+
+        $data = $this->get('jms_serializer')->serialize($annonces, 'json');
+
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
     /**
      * Get one service
      *
      * This call retrieves all services
      *
-     * @Rest\Get("/annonces/{id}")
+     * @Rest\Get("/user/annonces/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=404,description="No Professional",)
@@ -108,7 +116,7 @@ class AnnonceController extends Controller
      * create service
      *
      *
-     * @Rest\Post("/annonces")
+     * @Rest\Post("/user/annonces")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -153,7 +161,7 @@ class AnnonceController extends Controller
      *
      * This call retrieves all services
      *
-     * @Rest\Get("/annonces")
+     * @Rest\Get("/user/annonces")
      *
      * @SWG\Response(response=200,description="Success",)
      * @SWG\Response(response=404,description="No Professional",)
@@ -180,7 +188,7 @@ class AnnonceController extends Controller
      *
      * This call deletes selected services
      *
-     * @Rest\Delete("/annonces/{id}")
+     * @Rest\Delete("/user/annonces/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -218,7 +226,7 @@ class AnnonceController extends Controller
      * update service
      *
      *
-     * @Rest\Post("/annonces/{id}")
+     * @Rest\Post("/user/annonces/{id}")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -233,26 +241,22 @@ class AnnonceController extends Controller
     {
         $annonce = $this->getDoctrine()->getRepository('AppBundle:Annonce')->find($id);
 
-        $data = [
-            'title' => $request->request->get('title'),
-            'description' => $request->request->get('description'),
-            'category' => $request->request->get('category'),
-            'city' => $request->request->get('city'),
-            'phone' => $request->request->get('phone'),
-            'picture' => $request->request->get('picture'),
-        ];
-
-        var_dump($data);
-
-        $annonce->setTitle($data['title']);
-        $annonce->setDescription($data['description']);
-        $annonce->setCategory($data['category']);
-        $annonce->setCity($data['city']);
-        $annonce->setPhone($data['phone']);
-        $annonce->setPicture($data['picture']);
-
+        $aOptions = $request->request->all();
 
         $em = $this->getDoctrine()->getManager();
+        $categorie = $em->getRepository('AppBundle:Category')
+            ->findOneBy(['name' => $aOptions['category']]);
+        $annonce->setTitle($aOptions['title']);
+        $annonce->setDescription($aOptions['description']);
+        $annonce->setCity($aOptions['city']);
+        $annonce->setPicture($aOptions['picture']);
+        $annonce->setPhone($aOptions['phone']);
+        $annonce->setCategory($categorie);
+        $annonce->setCateg($aOptions['category']);
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $annonce->setUser($user);
+        // persist data
         $em->merge($annonce);
         $em->flush();
 

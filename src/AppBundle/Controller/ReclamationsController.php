@@ -17,7 +17,7 @@ class ReclamationsController extends Controller
      * create new reclamation
      *
      *
-     * @Rest\Post("/reclamations")
+     * @Rest\Post("/user/reclamation")
      *
      * @SWG\Response(response=200,description="Success",)
      *
@@ -47,7 +47,7 @@ class ReclamationsController extends Controller
      *
      * This call retrieves all reclamations
      *
-     * @Rest\Get("/reclamations")
+     * @Rest\Get("/user/reclamation/")
      *
      * @SWG\Response(response=200,description="Success",)
      *

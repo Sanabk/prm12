@@ -28,8 +28,9 @@ security:
             security: false
 
         general_exceptions:
-            pattern: ^/user/inscription
+            pattern: ^/user/inscription|^/user/forget-password
             security: false
+
 
         api_doc:
                     pattern: ^/api/doc
@@ -63,12 +64,24 @@ security:
             stateless: true
 
         client:
-            pattern: ^/
+            pattern: ^/user
             stateless: true
             simple_preauth:
                 authenticator: auth_token_authenticator
             provider: auth_token_user_provider
             anonymous: ~
+
+
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_token_generator: security.csrf.token_manager
+                # if you are using Symfony < 2.8, use the following config instead:
+                # csrf_provider: form.csrf_provider
+
+            logout:       true
+            anonymous:    true
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
